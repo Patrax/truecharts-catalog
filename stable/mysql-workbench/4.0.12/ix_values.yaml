@@ -1,0 +1,44 @@
+image:
+  repository: tccr.io/truecharts/mysql-workbench
+  pullPolicy: IfNotPresent
+  tag: 8.0.32@sha256:8388b98e316f58c20d2c5714dc5ab3c318ad0f39059a703e44b2b29af6e1bb3c
+
+securityContext:
+  runAsNonRoot: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    add:
+      - IPC_LOCK
+
+podSecurityContext:
+  runAsUser: 0
+  runAsGroup: 0
+
+probes:
+  liveness:
+    type: HTTP
+    path: /
+  readiness:
+    type: HTTP
+    path: /
+  startup:
+    type: HTTP
+    path: /
+
+service:
+  main:
+    ports:
+      main:
+        targetPort: 3000
+        protocol: HTTP
+        port: 10134
+
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+  varrun:
+    enabled: true
+
+portal:
+  enabled: true
